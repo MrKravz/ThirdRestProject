@@ -1,5 +1,6 @@
 package com.example.thirdProject.services;
 
+import com.example.thirdProject.exceptions.SensorNotFoundException;
 import com.example.thirdProject.models.Sensor;
 import com.example.thirdProject.repositories.SensorRepository;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,11 @@ public class SensorService implements CrudService<Sensor> {
 
     @Override
     public Sensor findById(int id) {
-        return sensorRepository.findById(id).orElseThrow(RuntimeException::new);
+        return sensorRepository.findById(id).orElseThrow(SensorNotFoundException::new);
+    }
+
+    public Sensor findByName(String name) {
+        return sensorRepository.findByName(name).orElseThrow(SensorNotFoundException::new);
     }
 
     @Override
@@ -33,7 +38,7 @@ public class SensorService implements CrudService<Sensor> {
     @Override
     @Transactional
     public Sensor update(Sensor entity, int id) {
-        var entityToUpdate = sensorRepository.findById(id).orElseThrow(RuntimeException::new);
+        var entityToUpdate = sensorRepository.findById(id).orElseThrow(SensorNotFoundException::new);
         entityToUpdate.setName(entity.getName());
         return sensorRepository.save(entityToUpdate);
     }
